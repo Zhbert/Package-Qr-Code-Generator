@@ -48,7 +48,7 @@ public class Main extends JFrame {
         jPanel.add(BorderLayout.CENTER, jTable);
         //StatusBar
         JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel statusLabel = new JLabel("Rows loaded: ");
+        JLabel statusLabel = new JLabel("Rows loaded: 0");
         statusBar.add(statusLabel);
         //Placement
         container.add(BorderLayout.NORTH, mb);
