@@ -3,7 +3,6 @@ package ru.zhbert.PackageQrCodeGenerator;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class Main extends JFrame {
