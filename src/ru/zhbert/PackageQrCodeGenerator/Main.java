@@ -21,7 +21,13 @@ public class Main extends JFrame {
         jm1.add(jm11);
         jm1.add(jm12);
         JMenu jm2 = new JMenu("About");
+        JMenuItem jm21 = new JMenuItem("About the utility");
+        jm2.add(jm21);
+        JMenu jm3 = new JMenu("Qr Codes");
+        JMenuItem jm31 = new JMenuItem("Create Qr Codes");
+        jm3.add(jm31);
         mb.add(jm1);
+        mb.add(jm3);
         mb.add(jm2);
         //Main table
         Vector<String> id = new Vector<>();
@@ -41,19 +47,14 @@ public class Main extends JFrame {
         JPanel jPanel = new JPanel(new BorderLayout());
         jPanel.add(BorderLayout.NORTH, th);
         jPanel.add(BorderLayout.CENTER, jTable);
-        //Controls
-        JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton convertButton = new JButton("Create QrCode Files");
-        JTextField pathField = new JTextField();
-        JButton pathChangeButton = new JButton("Change output path");
-        pathField.setColumns(20);
-        controlsPanel.add(pathChangeButton);
-        controlsPanel.add(pathField);
-        controlsPanel.add(convertButton);
+        //StatusBar
+        JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel statusLabel = new JLabel("Rows loaded: ");
+        statusBar.add(statusLabel);
         //Placement
         container.add(BorderLayout.NORTH, mb);
         container.add(BorderLayout.CENTER, jPanel);
-        container.add(BorderLayout.SOUTH, controlsPanel);
+        container.add(BorderLayout.SOUTH, statusBar);
         setVisible(true);
     }
 
