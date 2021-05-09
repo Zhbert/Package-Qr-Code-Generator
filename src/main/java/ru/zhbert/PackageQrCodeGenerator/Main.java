@@ -3,6 +3,8 @@ package ru.zhbert.PackageQrCodeGenerator;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class Main extends JFrame {
@@ -16,6 +18,7 @@ public class Main extends JFrame {
         JMenuBar mb = new JMenuBar();
         JMenu jm1 = new JMenu("File");
         JMenuItem jm11 = new JMenuItem("Choose source file");
+        jm11.addActionListener(new ChooseFileListener());
         JMenuItem jm12 = new JMenuItem("Close");
         jm1.add(jm11);
         jm1.add(jm12);
@@ -59,6 +62,13 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         new Main("Package QR Code Generator");
+    }
+
+    public class ChooseFileListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Нажат выбор файла!");
+        }
     }
 }
 
