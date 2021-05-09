@@ -1,13 +1,17 @@
 package ru.zhbert.PackageQrCodeGenerator;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Vector;
 
 public class Main extends JFrame {
+
+    private File qrFile;
 
     public Main(String title) throws HeadlessException {
         setTitle(title);
@@ -20,6 +24,7 @@ public class Main extends JFrame {
         JMenuItem jm11 = new JMenuItem("Choose source file");
         jm11.addActionListener(new ChooseFileListener());
         JMenuItem jm12 = new JMenuItem("Close");
+        jm12.addActionListener(new ExitListener());
         jm1.add(jm11);
         jm1.add(jm12);
         JMenu jm2 = new JMenu("About");
@@ -65,10 +70,46 @@ public class Main extends JFrame {
     }
 
     public class ChooseFileListener implements ActionListener {
+
+        private  JFileChooser fileChooser = null;
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Нажат выбор файла!");
+            fileChooser = new JFileChooser();
+            fileChooser.addChoosableFileFilter(new CsvFileFilter());
+            int ret = fileChooser.showDialog(null, "Открыть файл");
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                qrFile = fileChooser.getSelectedFile();
+            }
         }
     }
+
+    public class ExitListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+    }
+
+    public class CsvFileFilter extends FileFilter {
+
+        @Override
+        public boolean accept(File f) {
+            if (f != null) {
+                String name = f.getName();
+                int i = name.lastIndexOf('.');
+                if (i>0 && i<name.length()-1) {
+                    return name.substring(i+1).equalsIgnoreCase("csv");
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return "Файлы CSV";
+        }
+    }
+
 }
 
