@@ -35,6 +35,7 @@ public class Main extends JFrame {
         jm2.add(jm21);
         JMenu jm3 = new JMenu("Qr Codes");
         JMenuItem jm31 = new JMenuItem("Create Qr Codes");
+        jm31.addActionListener(new QRGenerateListener());
         jm3.add(jm31);
         mb.add(jm1);
         mb.add(jm3);
@@ -123,7 +124,6 @@ public class Main extends JFrame {
     }
 
     public class CsvFileFilter extends FileFilter {
-
         @Override
         public boolean accept(File f) {
             if (f != null) {
@@ -139,6 +139,14 @@ public class Main extends JFrame {
         @Override
         public String getDescription() {
             return "Файлы CSV";
+        }
+    }
+
+    public class QRGenerateListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
+            
         }
     }
 
