@@ -6,12 +6,13 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 import java.util.Vector;
 
 public class Main extends JFrame {
 
     private File qrFile;
+    private JTable jTable;
 
     public Main(String title) throws HeadlessException {
         setTitle(title);
@@ -47,7 +48,7 @@ public class Main extends JFrame {
         header.add("FILE NAME");
         header.add("TARGET STRING");
         header.add("PATH TO QR CODE FILE");
-        JTable jTable = new JTable(dataVector, header);
+        jTable = new JTable(dataVector, header);
         jTable.setRowHeight(20);
         jTable.setShowGrid(true);
         JTableHeader th = jTable.getTableHeader();
@@ -80,6 +81,33 @@ public class Main extends JFrame {
             int ret = fileChooser.showDialog(null, "Открыть файл");
             if (ret == JFileChooser.APPROVE_OPTION) {
                 qrFile = fileChooser.getSelectedFile();
+                try {
+                    FileReader fileReader = new FileReader(qrFile);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    String line = bufferedReader.readLine();
+                    Vector<String> data = new Vector<>();
+                    Vector<Vector<String>> dataVector = new Vector<Vector<String>>();
+                    while (line != null) {
+                        String[] params = line.split(";");
+                        for (String param : params) {
+                            data.add(param);
+                        }
+                        data.add(qrFile.getParent()+File.separator+data.firstElement()+".png");
+                        line = bufferedReader.readLine();
+                        dataVector.add(data);
+                    }
+                    Vector<String> header = new Vector<>(2);
+                    header.add("FILE NAME");
+                    header.add("TARGET STRING");
+                    header.add("PATH TO QR CODE FILE");
+                    jTable = new JTable(dataVector, header);
+                    jTable.repaint();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
             }
         }
     }
