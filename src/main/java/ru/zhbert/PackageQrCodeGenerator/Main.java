@@ -89,9 +89,10 @@ public class Main extends JFrame {
                     String line = bufferedReader.readLine();
                     DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
                     dtm.removeRow(0);
-                    Vector<String> data = new Vector<>();
+                    Vector<String> data;
                     int lineCounter = 0;
                     while (line != null) {
+                        data = new Vector<>();
                         String[] params = line.split(";");
                         for (String param : params) {
                             data.add(param);
