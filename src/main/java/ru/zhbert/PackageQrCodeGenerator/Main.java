@@ -88,7 +88,8 @@ public class Main extends JFrame {
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     String line = bufferedReader.readLine();
                     DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
-                    dtm.removeRow(0);
+                    dtm.getDataVector().removeAllElements();
+                    dtm.fireTableDataChanged();
                     Vector<String> data;
                     int lineCounter = 0;
                     while (line != null) {
