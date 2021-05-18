@@ -14,6 +14,7 @@ public class Main extends JFrame {
 
     private File qrFile;
     private JTable jTable;
+    private JLabel statusLabel;
 
     public Main(String title) throws HeadlessException {
         setTitle(title);
@@ -58,7 +59,7 @@ public class Main extends JFrame {
         jPanel.add(BorderLayout.CENTER, jTable);
         //StatusBar
         JPanel statusBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel statusLabel = new JLabel("Rows loaded: 0");
+        statusLabel = new JLabel("Rows loaded: 0");
         statusBar.add(statusLabel);
         //Placement
         container.add(BorderLayout.NORTH, mb);
@@ -89,6 +90,7 @@ public class Main extends JFrame {
                     DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
                     dtm.removeRow(0);
                     Vector<String> data = new Vector<>();
+                    int lineCounter = 0;
                     while (line != null) {
                         String[] params = line.split(";");
                         for (String param : params) {
@@ -98,7 +100,9 @@ public class Main extends JFrame {
                                 +"qrCodes"+File.separator+data.firstElement()+".png");
                         line = bufferedReader.readLine();
                         dtm.addRow(data);
+                        lineCounter++;
                     }
+                    statusLabel.setText("Rows loaded: " + lineCounter);
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 } catch (IOException ioException) {
