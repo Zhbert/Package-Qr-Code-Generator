@@ -2,6 +2,7 @@ package ru.zhbert.PackageQrCodeGenerator;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -85,23 +86,19 @@ public class Main extends JFrame {
                     FileReader fileReader = new FileReader(qrFile);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     String line = bufferedReader.readLine();
+                    DefaultTableModel dtm = (DefaultTableModel) jTable.getModel();
+                    dtm.removeRow(0);
                     Vector<String> data = new Vector<>();
-                    Vector<Vector<String>> dataVector = new Vector<Vector<String>>();
                     while (line != null) {
                         String[] params = line.split(";");
                         for (String param : params) {
                             data.add(param);
                         }
-                        data.add(qrFile.getParent()+File.separator+data.firstElement()+".png");
+                        data.add(qrFile.getParent()+File.separator
+                                +"qrCodes"+File.separator+data.firstElement()+".png");
                         line = bufferedReader.readLine();
-                        dataVector.add(data);
+                        dtm.addRow(data);
                     }
-                    Vector<String> header = new Vector<>(2);
-                    header.add("FILE NAME");
-                    header.add("TARGET STRING");
-                    header.add("PATH TO QR CODE FILE");
-                    jTable = new JTable(dataVector, header);
-                    jTable.repaint();
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 } catch (IOException ioException) {
