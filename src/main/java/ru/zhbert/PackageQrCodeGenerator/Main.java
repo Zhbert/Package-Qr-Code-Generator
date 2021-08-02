@@ -22,6 +22,7 @@ public class Main extends JFrame {
 
     public Main(String title) throws HeadlessException {
         setTitle(title);
+        setLocationRelativeTo(null);
         Container container = getContentPane();
         setSize(640, 480);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -36,6 +37,7 @@ public class Main extends JFrame {
         jm1.add(jm12);
         JMenu jm2 = new JMenu("About");
         JMenuItem jm21 = new JMenuItem("About the utility");
+        jm21.addActionListener(new AboutListener());
         jm2.add(jm21);
         JMenu jm3 = new JMenu("Qr Codes");
         JMenuItem jm31 = new JMenuItem("Create Qr Codes");
@@ -75,7 +77,7 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Main("Package QR Code Generator");
+        new Main("Package QR-code Generator");
     }
 
     public class ChooseFileListener implements ActionListener {
@@ -125,6 +127,40 @@ public class Main extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
+        }
+    }
+
+    public class AboutListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JDialog dialog = new JDialog();
+            dialog.setTitle("About");
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setSize(150, 100);
+            dialog.getRootPane().setWindowDecorationStyle(JRootPane.INFORMATION_DIALOG);
+            dialog.setLocationRelativeTo(null);
+            dialog.setModal(true);
+            dialog.setSize(400,  180);
+
+            String text = "<html><center><h2>Package QR-code Generator</h2>" +
+                    "<br>" +
+                    "A simple utility for batch generation of QR codes" +
+                    "<br>" +
+                    "Licensed by <a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a>" +
+                    "<br>" +
+                    "Developed by <a href=https://zhbert.ru>Zhbert</a><br>" +
+                    "Email: zhbert@yandex.ru" +
+                    "<center></html>";
+            Label label = new Label(text, SwingConstants.CENTER);
+            Font f = new Font("Arial", Font.PLAIN, 14);
+            label.setFont(f);
+            label.setAlignment(Label.CENTER);
+
+            Box box = Box.createVerticalBox();
+            box.add(label);
+            dialog.add(box);
+
+            dialog.setVisible(true);
         }
     }
 
