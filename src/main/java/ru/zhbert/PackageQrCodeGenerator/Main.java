@@ -142,7 +142,7 @@ public class Main extends JFrame {
             dialog.setModal(true);
             dialog.setSize(400,  180);
 
-            String text = "<html><center><h2>Package QR-code Generator</h2>" +
+            String text = "<html><center><h2>Package QR-code Generator v. 1.0.0</h2>" +
                     "<br>" +
                     "A simple utility for batch generation of QR codes" +
                     "<br>" +
