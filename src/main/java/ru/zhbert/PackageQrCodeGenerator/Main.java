@@ -1,5 +1,8 @@
 package ru.zhbert.PackageQrCodeGenerator;
 
+import com.google.zxing.WriterException;
+import ru.zhbert.PackageQrCodeGenerator.service.QRCodeGenerator;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
@@ -13,13 +16,14 @@ import java.util.Vector;
 public class Main extends JFrame {
 
     private File qrFile;
+    private String qrCodesPath;
     private JTable jTable;
     private JLabel statusLabel;
 
     public Main(String title) throws HeadlessException {
         setTitle(title);
         Container container = getContentPane();
-        setSize(640,480);
+        setSize(640, 480);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //Main menu
         JMenuBar mb = new JMenuBar();
@@ -50,10 +54,11 @@ public class Main extends JFrame {
         Vector<String> header = new Vector<>(2);
         header.add("FILE NAME");
         header.add("TARGET STRING");
-        header.add("PATH TO QR CODE FILE");
+        header.add("FILENAME");
         jTable = new JTable(dataVector, header);
         jTable.setRowHeight(20);
         jTable.setShowGrid(true);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         JTableHeader th = jTable.getTableHeader();
         JPanel jPanel = new JPanel(new BorderLayout());
         jPanel.add(BorderLayout.NORTH, th);
@@ -75,7 +80,7 @@ public class Main extends JFrame {
 
     public class ChooseFileListener implements ActionListener {
 
-        private  JFileChooser fileChooser = null;
+        private JFileChooser fileChooser = null;
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -84,6 +89,7 @@ public class Main extends JFrame {
             int ret = fileChooser.showDialog(null, "Открыть файл");
             if (ret == JFileChooser.APPROVE_OPTION) {
                 qrFile = fileChooser.getSelectedFile();
+                qrCodesPath = qrFile.getParent() + File.separator + "qrCodes";
                 try {
                     FileReader fileReader = new FileReader(qrFile);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -99,8 +105,7 @@ public class Main extends JFrame {
                         for (String param : params) {
                             data.add(param);
                         }
-                        data.add(qrFile.getParent()+File.separator
-                                +"qrCodes"+File.separator+data.firstElement()+".png");
+                        data.add(data.firstElement() + ".png");
                         line = bufferedReader.readLine();
                         dtm.addRow(data);
                         lineCounter++;
@@ -129,8 +134,8 @@ public class Main extends JFrame {
             if (f != null) {
                 String name = f.getName();
                 int i = name.lastIndexOf('.');
-                if (i>0 && i<name.length()-1) {
-                    return name.substring(i+1).equalsIgnoreCase("csv");
+                if (i > 0 && i < name.length() - 1) {
+                    return name.substring(i + 1).equalsIgnoreCase("csv");
                 }
             }
             return false;
@@ -145,8 +150,19 @@ public class Main extends JFrame {
     public class QRGenerateListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
-            
+            QRCodeGenerator qrCodeGenerator = new QRCodeGenerator(qrCodesPath);
+            int count;
+            for (count = 0; count < jTable.getRowCount(); count++) {
+                try {
+                    qrCodeGenerator.generateQRCodeImage(jTable.getValueAt(count, 0).toString(),
+                            350, 350, jTable.getValueAt(count, 2).toString());
+                } catch (WriterException writerException) {
+                    writerException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+            statusLabel.setText("Files processed: " + count++);
         }
     }
 
